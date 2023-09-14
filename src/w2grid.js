@@ -1215,12 +1215,20 @@ class w2grid extends w2base {
                     case 'in':
                         tmp = sdata.value
                         if (sdata.svalue) tmp = sdata.svalue
-                        if ((tmp.indexOf(w2utils.isFloat(val1b) ? parseFloat(val1b) : val1b) !== -1) || (tmp.indexOf(val1) !== -1 && val1 !== '')) fl++
+                        if (Array.isArray(val1b) && Array.isArray(tmp)) {
+                            const tmp2 = val1b.map(v => v.toLowerCase())
+                            if (tmp.filter(v => tmp2.includes(v)).length > 0) fl++
+                        }
+                        else if ((tmp.indexOf(w2utils.isFloat(val1b) ? parseFloat(val1b) : val1b) !== -1) || (tmp.indexOf(val1) !== -1 && val1 !== '')) fl++
                         break
                     case 'not in':
                         tmp = sdata.value
                         if (sdata.svalue) tmp = sdata.svalue
-                        if (!((tmp.indexOf(w2utils.isFloat(val1b) ? parseFloat(val1b) : val1b) !== -1) || (tmp.indexOf(val1) !== -1 && val1 !== ''))) fl++
+                        if (Array.isArray(val1b) && Array.isArray(tmp)) {
+                            const tmp2 = val1b.map(v => v.toLowerCase())
+                            if (tmp.filter(v => tmp2.includes(v)).length === 0) fl++
+                        }
+                        else if (!((tmp.indexOf(w2utils.isFloat(val1ab) ? parseFloat(val1b) : val1b) !== -1) || (tmp.indexOf(val1) !== -1 && val1 !== ''))) fl++
                         break
                     case 'begins':
                     case 'begins with': // need for back compatibility
