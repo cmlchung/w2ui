@@ -1,4 +1,4 @@
-/* w2ui 2.0.x (nightly) (9/14/2023, 5:25:30 PM) (c) http://w2ui.com, vitmalina@gmail.com */
+/* w2ui 2.0.x (nightly) (9/18/2023, 3:01:50 PM) (c) http://w2ui.com, vitmalina@gmail.com */
 /**
  * Part of w2ui 2.0 library
  *  - Dependencies: w2utils
@@ -18723,7 +18723,7 @@ class w2grid extends w2base {
         // value, attr, style, className, divAttr
         let { value, style, className, attr, divAttr } = this.getCellValue(ind, col_ind, summary, true)
         let edit = (ind !== -1 ? this.getCellEditable(ind, col_ind) : '')
-        let divStyle = 'max-height: '+ parseInt(this.recordHeight) +'px;' + (col.clipboardCopy ? 'margin-right: 20px' : '')
+        let divStyle = col.clipboardCopy ? 'margin-right: 20px' : ''
         let isChanged = !summary && record?.w2ui?.changes && record.w2ui.changes[col.field] != null
         let sel = this.last.selection
         let isRowSelected = false
