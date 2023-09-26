@@ -1109,6 +1109,7 @@ class w2grid extends w2base {
                     case '=':
                     case 'is':
                         if (obj.parseField(rec, search.field) == sdata.value) fl++ // do not hide record
+			else if (val1 == sdata.value) fl++
                         else if (search.type == 'date') {
                             tmp  = (obj.parseField(rec, search.field + '_') instanceof Date ? obj.parseField(rec, search.field + '_') : obj.parseField(rec, search.field))
                             val1 = w2utils.formatDate(tmp, 'yyyy-mm-dd')

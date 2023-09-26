@@ -1,4 +1,4 @@
-/* w2ui 2.0.x (nightly) (9/18/2023, 3:01:50 PM) (c) http://w2ui.com, vitmalina@gmail.com */
+/* w2ui 2.0.x (nightly) (9/26/2023, 7:53:41 AM) (c) http://w2ui.com, vitmalina@gmail.com */
 /**
  * Part of w2ui 2.0 library
  *  - Dependencies: w2utils
@@ -12041,6 +12041,7 @@ class w2grid extends w2base {
                     case '=':
                     case 'is':
                         if (obj.parseField(rec, search.field) == sdata.value) fl++ // do not hide record
+			else if (val1 == sdata.value) fl++
                         else if (search.type == 'date') {
                             tmp  = (obj.parseField(rec, search.field + '_') instanceof Date ? obj.parseField(rec, search.field + '_') : obj.parseField(rec, search.field))
                             val1 = w2utils.formatDate(tmp, 'yyyy-mm-dd')
