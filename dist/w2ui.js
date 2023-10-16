@@ -1,4 +1,4 @@
-/* w2ui 2.0.x (nightly) (9/26/2023, 7:53:41 AM) (c) http://w2ui.com, vitmalina@gmail.com */
+/* w2ui 2.0.x (nightly) (10/16/2023, 4:30:53 PM) (c) http://w2ui.com, vitmalina@gmail.com */
 /**
  * Part of w2ui 2.0 library
  *  - Dependencies: w2utils
@@ -2408,7 +2408,7 @@ class Utils {
     }
     getStrWidth(str, styles, raw) {
         query('body').append(`
-            <div id="_tmp_width" style="position: absolute; top: -9000px; ${styles || ''}">
+            <div id="_tmp_width" style="position: absolute; top: -9000px; white-space: nowrap; ${styles || ''}">
                 ${raw ? str : this.encodeTags(str)}
             </div>`)
         let width = query('#_tmp_width')[0].clientWidth
