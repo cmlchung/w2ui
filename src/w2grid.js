@@ -5682,7 +5682,7 @@ class w2grid extends w2base {
             if (obj.selectType == 'row' && (query(event.target).parents().hasClass('w2ui-head') || query(event.target).hasClass('w2ui-head'))) return
             if (obj.last.move && obj.last.move.type == 'expand') return
             // if altKey - alow text selection
-            if (event.altKey) {
+            if (true || event.altKey) {
                 query(obj.box).find('.w2ui-grid-body').css('user-select', 'text')
                 obj.selectNone()
                 obj.last.move       = { type: 'text-select' }

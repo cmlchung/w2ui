@@ -1,4 +1,4 @@
-/* w2ui 2.0.x (nightly) (10/16/2023, 4:30:53 PM) (c) http://w2ui.com, vitmalina@gmail.com */
+/* w2ui 2.0.x (nightly) (10/20/2023, 8:48:56 AM) (c) http://w2ui.com, vitmalina@gmail.com */
 /**
  * Part of w2ui 2.0 library
  *  - Dependencies: w2utils
@@ -3665,9 +3665,6 @@ class Dialog extends w2base {
                 ? box.find(sel).filter(focus).get(0)
                 : box.find(sel).get(focus)
             el?.focus()
-        } else {
-            let el = box.find('[name=hidden-first]').get(0)
-            if (el) el.focus()
         }
         // keep focus/blur inside popup
         query(box).find(sel + ',[name=hidden-first],[name=hidden-last]')
@@ -16474,7 +16471,7 @@ class w2grid extends w2base {
             if (obj.selectType == 'row' && (query(event.target).parents().hasClass('w2ui-head') || query(event.target).hasClass('w2ui-head'))) return
             if (obj.last.move && obj.last.move.type == 'expand') return
             // if altKey - alow text selection
-            if (event.altKey) {
+            if (true || event.altKey) {
                 query(obj.box).find('.w2ui-grid-body').css('user-select', 'text')
                 obj.selectNone()
                 obj.last.move       = { type: 'text-select' }

@@ -592,9 +592,6 @@ class Dialog extends w2base {
                 ? box.find(sel).filter(focus).get(0)
                 : box.find(sel).get(focus)
             el?.focus()
-        } else {
-            let el = box.find('[name=hidden-first]').get(0)
-            if (el) el.focus()
         }
         // keep focus/blur inside popup
         query(box).find(sel + ',[name=hidden-first],[name=hidden-last]')
