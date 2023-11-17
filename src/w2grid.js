@@ -2610,7 +2610,7 @@ class w2grid extends w2base {
         this.searchData = edata.detail.searchData
         this.searchSelected = null
         this.last.search = ''
-        this.last.logic = (hasHiddenSearches ? 'AND' : 'OR')
+        this.last.logic = 'AND'
         // --- do not reset to All Fields (I think)
         input.next().hide() // advanced search button
         if (this.searches.length > 0) {

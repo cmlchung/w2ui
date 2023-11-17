@@ -1,4 +1,4 @@
-/* w2ui 2.0.x (nightly) (10/20/2023, 8:48:56 AM) (c) http://w2ui.com, vitmalina@gmail.com */
+/* w2ui 2.0.x (nightly) (11/17/2023, 4:07:57 AM) (c) http://w2ui.com, vitmalina@gmail.com */
 /**
  * Part of w2ui 2.0 library
  *  - Dependencies: w2utils
@@ -13500,7 +13500,7 @@ class w2grid extends w2base {
         this.searchData = edata.detail.searchData
         this.searchSelected = null
         this.last.search = ''
-        this.last.logic = (hasHiddenSearches ? 'AND' : 'OR')
+        this.last.logic = 'AND'
         // --- do not reset to All Fields (I think)
         input.next().hide() // advanced search button
         if (this.searches.length > 0) {
