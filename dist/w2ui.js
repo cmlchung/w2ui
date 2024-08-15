@@ -1,4 +1,4 @@
-/* w2ui 2.0.x (nightly) (8/15/2024, 9:34:39 AM) (c) http://w2ui.com, vitmalina@gmail.com */
+/* w2ui 2.0.x (nightly) (8/15/2024, 12:16:36 PM) (c) http://w2ui.com, vitmalina@gmail.com */
 /**
  * Part of w2ui 2.0 library
  *  - Dependencies: w2utils
@@ -13338,7 +13338,6 @@ class w2grid extends w2base {
                 event.detail.overlay.hide()
                 this.last.logic  = event.detail.item.logic || 'AND'
                 this.last.search = ''
-                this.last.label  = '[Multiple Fields]'
                 this.searchData  = w2utils.clone(event.detail.item.data)
                 this.searchSelected = w2utils.clone(event.detail.item, { exclude: ['icon', 'remove'] })
                 this.reload()
@@ -15939,11 +15938,7 @@ class w2grid extends w2base {
         for (let s = 0; s < this.searches.length; s++) {
             if (this.searches[s].field == this.last.field) this.last.label = this.searches[s].label
         }
-        if (this.last.multi) {
-            sInput.attr('placeholder', '[' + w2utils.lang('Multiple Fields') + ']')
-        } else {
-            sInput.attr('placeholder', w2utils.lang('Search') + ' ' + w2utils.lang(this.last.label, true))
-        }
+        sInput.attr('placeholder', w2utils.lang('Search') + ' ' + w2utils.lang(this.last.label, true))
         if (sInput.val() != this.last.search) {
             let val = this.last.search
             let tmp = sInput._w2field
