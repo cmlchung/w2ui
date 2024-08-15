@@ -1,4 +1,4 @@
-/* w2ui 2.0.x (nightly) (8/15/2024, 12:16:36 PM) (c) http://w2ui.com, vitmalina@gmail.com */
+/* w2ui 2.0.x (nightly) (8/15/2024, 1:31:52 PM) (c) http://w2ui.com, vitmalina@gmail.com */
 /**
  * Part of w2ui 2.0 library
  *  - Dependencies: w2utils
@@ -13075,13 +13075,19 @@ class w2grid extends w2base {
                      * shown. Otherwise search string is not empty, but no fields is actually applied and all fields are shown
                      */
                     if (searchData.length == 0) {
-                        let tmp = {
-                            field: 'All',
-                            type: 'text',
-                            operator: this.defaultOperator.text,
-                            value: value
-                        }
-                        searchData.push(tmp)
+			if (value == '') {
+			    last_logic = 'AND'
+			    this.searchReset()
+			}
+			else {
+                            let tmp = {
+                                field: 'All',
+                                type: 'text',
+                                operator: this.defaultOperator.text,
+                                value: value
+                            }
+                            searchData.push(tmp)
+			}
                     }
                 } else {
                     let el = overlay.find('#grid_'+ this.name +'_search_all')
