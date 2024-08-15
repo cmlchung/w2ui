@@ -2380,9 +2380,14 @@ class w2grid extends w2base {
         }).then(event => {
             query(event.detail.overlay.box).find('#remove').on('click', () => {
                 this.searchData.splice(`${sd_ind}`, 1)
-                this.reload()
-                this.localSearch()
-                w2tooltip.hide(this.name + '-search-props')
+	        if (this.searchData.length > 0) {
+                    this.reload()
+                    this.localSearch()
+                    w2tooltip.hide(this.name + '-search-props')
+		}
+		else {
+		    this.searchReset()
+		}
             })
         })
     }

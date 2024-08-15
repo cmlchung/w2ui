@@ -1,4 +1,4 @@
-/* w2ui 2.0.x (nightly) (11/17/2023, 4:07:57 AM) (c) http://w2ui.com, vitmalina@gmail.com */
+/* w2ui 2.0.x (nightly) (8/15/2024, 9:34:39 AM) (c) http://w2ui.com, vitmalina@gmail.com */
 /**
  * Part of w2ui 2.0 library
  *  - Dependencies: w2utils
@@ -13277,9 +13277,14 @@ class w2grid extends w2base {
         }).then(event => {
             query(event.detail.overlay.box).find('#remove').on('click', () => {
                 this.searchData.splice(`${sd_ind}`, 1)
-                this.reload()
-                this.localSearch()
-                w2tooltip.hide(this.name + '-search-props')
+	        if (this.searchData.length > 0) {
+                    this.reload()
+                    this.localSearch()
+                    w2tooltip.hide(this.name + '-search-props')
+		}
+		else {
+		    this.searchReset()
+		}
             })
         })
     }
