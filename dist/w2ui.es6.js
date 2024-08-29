@@ -1,4 +1,4 @@
-/* w2ui 2.0.x (nightly) (8/15/2024, 1:31:52 PM) (c) http://w2ui.com, vitmalina@gmail.com */
+/* w2ui 2.0.x (nightly) (8/29/2024, 6:43:16 PM) (c) http://w2ui.com, vitmalina@gmail.com */
 /**
  * Part of w2ui 2.0 library
  *  - Dependencies: w2utils
@@ -2421,7 +2421,7 @@ class Utils {
         }
         return str.replace(/\${([^}]+)?}/g, function($1, $2) { return replace_obj[$2]||$2 })
     }
-    marker(el, items, options = { onlyFirst: false, wholeWord: false }) {
+    marker(el, items, options = { onlyFirst: false, wholeWord: false , keep: false}) {
         if (!Array.isArray(items)) {
             if (items != null && items !== '') {
                 items = [items]
@@ -2430,8 +2430,17 @@ class Utils {
             }
         }
         let ww = options.wholeWord
+	let keep = options.keep
         query(el).each(el => {
-            clearMerkers(el)
+	    if (!keep) {
+                clearMerkers(el)
+	    }
+	    else {
+                let markerRE = /\<span class=\"w2ui\-marker\"\>((.|\n|\r)*)\<\/span\>/ig
+                if (el.innerHTML.indexOf('<span class="w2ui-marker"') !== -1) {
+		    return
+		}
+	    }
             items.forEach(str => {
                 if (typeof str !== 'string') str = String(str)
                 let replaceValue = (matched) => { // mark new
@@ -15901,8 +15910,6 @@ class w2grid extends w2base {
                 if (tr1.hasClass('w2ui-selected')) {
                     st = st.replace('background-color', 'none')
                 }
-                tr1[0].style.cssText = 'height: '+ this.recordHeight + 'px;' + st
-                tr2[0].style.cssText = 'height: '+ this.recordHeight + 'px;' + st
             }
             if (isSummary) {
                 this.resize()
@@ -18209,14 +18216,14 @@ class w2grid extends w2base {
             html2   += rec_html[1]
         }
         let h2 = (buffered - limit) * this.recordHeight
-        html1 += '<tr id="grid_' + this.name + '_frec_bottom" rec="bottom" line="bottom" style="height: ' + h2 + 'px; vertical-align: top">' +
+        html1 += '<tr id="grid_' + this.name + '_frec_bottom" rec="bottom" line="bottom" style="vertical-align: top">' +
                 '    <td colspan="2000" style="border: 0"></td>'+
                 '</tr>'+
                 '<tr id="grid_'+ this.name +'_frec_more" style="display: none; ">'+
                 '    <td colspan="2000" class="w2ui-load-more"></td>'+
                 '</tr>'+
                 '</tbody></table>'
-        html2 += '<tr id="grid_' + this.name + '_rec_bottom" rec="bottom" line="bottom" style="height: ' + h2 + 'px; vertical-align: top">' +
+        html2 += '<tr id="grid_' + this.name + '_rec_bottom" rec="bottom" line="bottom" style="vertical-align: top">' +
                 '    <td colspan="2000" style="border: 0"></td>'+
                 '</tr>'+
                 '<tr id="grid_'+ this.name +'_rec_more" style="display: none">'+
@@ -18431,22 +18438,11 @@ class w2grid extends w2base {
         if (first <= start || first == 1 || this.last.vscroll.pull_refresh) { // scroll down
             if (end <= last + this.last.vscroll.show_extra - 2 && end != this.total) return
             this.last.vscroll.pull_refresh = false
-            // remove from top
-            while (true) {
-                tmp1 = frecords.find('#grid_'+ this.name +'_frec_top').next()
-                tmp2 = records.find('#grid_'+ this.name +'_rec_top').next()
-                if (tmp2.attr('line') == 'bottom') break
-                if (parseInt(tmp2.attr('line')) < start) {
-                    tmp1.remove()
-                    tmp2.remove()
-                } else {
-                    break
-                }
-            }
             // add at bottom
             tmp = records.find('#grid_'+ this.name +'_rec_bottom').prev()
             rec_start = tmp.attr('line')
             if (rec_start == 'top') rec_start = start
+            let change = false
             for (let i = parseInt(rec_start) + 1; i <= end; i++) {
                 if (!this.records[i-1]) continue
                 tmp2 = this.records[i-1].w2ui
@@ -18456,48 +18452,17 @@ class w2grid extends w2base {
                 rec_html = this.getRecordHTML(i-1, i)
                 tr2.before(rec_html[1])
                 tr2f.before(rec_html[0])
+		change = true
             }
-            markSearch()
-            setTimeout(() => { this.refreshRanges() }, 0)
-        } else { // scroll up
-            if (start >= first - this.last.vscroll.show_extra + 2 && start > 1) return
-            // remove from bottom
-            while (true) {
-                tmp1 = frecords.find('#grid_'+ this.name +'_frec_bottom').prev()
-                tmp2 = records.find('#grid_'+ this.name +'_rec_bottom').prev()
-                if (tmp2.attr('line') == 'top') break
-                if (parseInt(tmp2.attr('line')) > end) {
-                    tmp1.remove()
-                    tmp2.remove()
-                } else {
-                    break
-                }
-            }
-            // add at top
-            tmp       = records.find('#grid_'+ this.name +'_rec_top').next()
-            rec_start = tmp.attr('line')
-            if (rec_start == 'bottom') rec_start = end
-            for (let i = parseInt(rec_start) - 1; i >= start; i--) {
-                if (!this.records[i-1]) continue
-                tmp2 = this.records[i-1].w2ui
-                if (tmp2 && !Array.isArray(tmp2.children)) {
-                    tmp2.expanded = false
-                }
-                rec_html = this.getRecordHTML(i-1, i)
-                tr1.after(rec_html[1])
-                tr1f.after(rec_html[0])
-            }
-            markSearch()
+	    if (change) {
+              markSearch()
+	    }
             setTimeout(() => { this.refreshRanges() }, 0)
         }
         // first/last row size
         let h1 = (start - 1) * this.recordHeight
         let h2 = (buffered - end) * this.recordHeight
         if (h2 < 0) h2 = 0
-        tr1.css('height', h1 + 'px')
-        tr1f.css('height', h1 + 'px')
-        tr2.css('height', h2 + 'px')
-        tr2f.css('height', h2 + 'px')
         this.last.vscroll.recIndStart = start
         this.last.vscroll.recIndEnd   = end
         // load more if needed
@@ -18545,7 +18510,7 @@ class w2grid extends w2base {
                 if (search.length > 0) {
                     search.forEach((item) => {
                         let el = query(obj.box).find('td[col="'+ item.col +'"]:not(.w2ui-head)')
-                        w2utils.marker(el, item.search)
+                        w2utils.marker(el, item.search, {keep: true})
                     })
                 }
             }, 50)

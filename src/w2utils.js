@@ -1509,7 +1509,7 @@ class Utils {
         return str.replace(/\${([^}]+)?}/g, function($1, $2) { return replace_obj[$2]||$2 })
     }
 
-    marker(el, items, options = { onlyFirst: false, wholeWord: false }) {
+    marker(el, items, options = { onlyFirst: false, wholeWord: false , keep: false}) {
         if (!Array.isArray(items)) {
             if (items != null && items !== '') {
                 items = [items]
@@ -1518,8 +1518,17 @@ class Utils {
             }
         }
         let ww = options.wholeWord
+	let keep = options.keep
         query(el).each(el => {
-            clearMerkers(el)
+	    if (!keep) {
+                clearMerkers(el)
+	    }
+	    else {
+                let markerRE = /\<span class=\"w2ui\-marker\"\>((.|\n|\r)*)\<\/span\>/ig
+                if (el.innerHTML.indexOf('<span class="w2ui-marker"') !== -1) {
+		    return
+		}
+	    }
             items.forEach(str => {
                 if (typeof str !== 'string') str = String(str)
                 let replaceValue = (matched) => { // mark new
