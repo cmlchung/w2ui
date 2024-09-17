@@ -1097,6 +1097,7 @@ class w2grid extends w2base {
                 val1 = (val1b != null && (typeof val1b != 'object' || val1b.toString != defaultToString))
                     ? String(val1b).toLowerCase()
                     : '' // do not match a bogus string
+		val1 = w2utils.stripTags(val1.replace(/<br\s*\/?>/gi, ' '));
                 if (sdata.value != null) {
                     if (!Array.isArray(sdata.value)) {
                         val2 = String(sdata.value).toLowerCase()
@@ -1236,7 +1237,8 @@ class w2grid extends w2base {
                         if (val1.indexOf(val2) === 0) fl++ // do not hide record
                         break
                     case 'contains':
-                        if (val1.indexOf(val2) >= 0) fl++ // do not hide record
+			const tmp2 = w2utils.splitSpacesExcludeQuotes(val2);
+			if (tmp2.filter(v => val1.indexOf(v) >= 0).length === tmp2.length) fl++;
                         break
                     case 'null':
                         if (obj.parseField(rec, search.field) == null) fl++ // do not hide record

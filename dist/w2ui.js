@@ -1,4 +1,4 @@
-/* w2ui 2.0.x (nightly) (8/29/2024, 6:43:16 PM) (c) http://w2ui.com, vitmalina@gmail.com */
+/* w2ui 2.0.x (nightly) (9/17/2024, 8:19:33 AM) (c) http://w2ui.com, vitmalina@gmail.com */
 /**
  * Part of w2ui 2.0 library
  *  - Dependencies: w2utils
@@ -2446,12 +2446,15 @@ class Utils {
                 let replaceValue = (matched) => { // mark new
                     return '<span class="w2ui-marker">' + matched + '</span>'
                 }
-                // escape regex special chars
-                str = str.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, '\\$&').replace(/&/g, '&amp;')
-                    .replace(/</g, '&gt;').replace(/>/g, '&lt;')
-                let regex  = new RegExp((ww ? '\\b' : '') + str + (ww ? '\\b' : '')+ '(?!([^<]+)?>)',
-                    'i' + (!options.onlyFirst ? 'g' : '')) // only outside tags
-                el.innerHTML = el.innerHTML.replace(regex, replaceValue)
+		const str2 = this.splitSpacesExcludeQuotes(str);
+		for (let str3 of str2) {
+                    // escape regex special chars
+                    str3 = str3.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, '\\$&').replace(/&/g, '&amp;')
+                        .replace(/</g, '&gt;').replace(/>/g, '&lt;')
+                    let regex  = new RegExp((ww ? '\\b' : '') + str3 + (ww ? '\\b' : '')+ '(?!([^<]+)?>)',
+                        'i' + (!options.onlyFirst ? 'g' : '')) // only outside tags
+                    el.innerHTML = el.innerHTML.replace(regex, replaceValue)
+		}
             })
         })
         function clearMerkers(el) {
@@ -3108,6 +3111,24 @@ class Utils {
             clearTimeout(timeout)
             timeout = setTimeout(() => { func(...args) }, wait)
         }
+    }
+    splitSpacesExcludeQuotesDetailed(string) {
+        const groupsRegex = /[^\s"']+|(?:"|'){2,}|"(?!")([^"]*)"|'(?!')([^']*)'|"|'/g;
+        const matches = [];
+        let match;
+        while (match = groupsRegex.exec(string)) {
+            if (match[2]) {
+                matches.push({ type: "single", value: match[2] });
+            } else if (match[1]) {
+                matches.push({ type: "double", value: match[1] });
+            } else {
+                matches.push({ type: "plain", value: match[0] });
+            }
+        }
+        return matches;
+    }
+    splitSpacesExcludeQuotes(string) {
+        return this.splitSpacesExcludeQuotesDetailed(string).map((details) => details.value);
     }
 }
 var w2utils = new Utils() // eslint-disable-line -- needs to be functional/module scope variable
@@ -12035,6 +12056,7 @@ class w2grid extends w2base {
                 val1 = (val1b != null && (typeof val1b != 'object' || val1b.toString != defaultToString))
                     ? String(val1b).toLowerCase()
                     : '' // do not match a bogus string
+		val1 = w2utils.stripTags(val1.replace(/<br\s*\/?>/gi, ' '));
                 if (sdata.value != null) {
                     if (!Array.isArray(sdata.value)) {
                         val2 = String(sdata.value).toLowerCase()
@@ -12174,7 +12196,8 @@ class w2grid extends w2base {
                         if (val1.indexOf(val2) === 0) fl++ // do not hide record
                         break
                     case 'contains':
-                        if (val1.indexOf(val2) >= 0) fl++ // do not hide record
+			const tmp2 = w2utils.splitSpacesExcludeQuotes(val2);
+			if (tmp2.filter(v => val1.indexOf(v) >= 0).length === tmp2.length) fl++;
                         break
                     case 'null':
                         if (obj.parseField(rec, search.field) == null) fl++ // do not hide record

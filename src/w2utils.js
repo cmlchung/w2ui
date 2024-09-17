@@ -1534,12 +1534,16 @@ class Utils {
                 let replaceValue = (matched) => { // mark new
                     return '<span class="w2ui-marker">' + matched + '</span>'
                 }
-                // escape regex special chars
-                str = str.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, '\\$&').replace(/&/g, '&amp;')
-                    .replace(/</g, '&gt;').replace(/>/g, '&lt;')
-                let regex  = new RegExp((ww ? '\\b' : '') + str + (ww ? '\\b' : '')+ '(?!([^<]+)?>)',
-                    'i' + (!options.onlyFirst ? 'g' : '')) // only outside tags
-                el.innerHTML = el.innerHTML.replace(regex, replaceValue)
+
+		const str2 = this.splitSpacesExcludeQuotes(str);
+		for (let str3 of str2) {
+                    // escape regex special chars
+                    str3 = str3.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, '\\$&').replace(/&/g, '&amp;')
+                        .replace(/</g, '&gt;').replace(/>/g, '&lt;')
+                    let regex  = new RegExp((ww ? '\\b' : '') + str3 + (ww ? '\\b' : '')+ '(?!([^<]+)?>)',
+                        'i' + (!options.onlyFirst ? 'g' : '')) // only outside tags
+                    el.innerHTML = el.innerHTML.replace(regex, replaceValue)
+		}
             })
         })
         function clearMerkers(el) {
@@ -2228,6 +2232,26 @@ class Utils {
             clearTimeout(timeout)
             timeout = setTimeout(() => { func(...args) }, wait)
         }
+    }
+
+    splitSpacesExcludeQuotesDetailed(string) {
+        const groupsRegex = /[^\s"']+|(?:"|'){2,}|"(?!")([^"]*)"|'(?!')([^']*)'|"|'/g;
+        const matches = [];
+        let match;
+        while (match = groupsRegex.exec(string)) {
+            if (match[2]) {
+                matches.push({ type: "single", value: match[2] });
+            } else if (match[1]) {
+                matches.push({ type: "double", value: match[1] });
+            } else {
+                matches.push({ type: "plain", value: match[0] });
+            }
+        }
+        return matches;
+    }
+
+    splitSpacesExcludeQuotes(string) {
+        return this.splitSpacesExcludeQuotesDetailed(string).map((details) => details.value);
     }
 }
 var w2utils = new Utils() // eslint-disable-line -- needs to be functional/module scope variable
