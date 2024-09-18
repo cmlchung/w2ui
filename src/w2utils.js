@@ -1538,8 +1538,8 @@ class Utils {
 		const str2 = this.splitSpacesExcludeQuotes(str);
 		for (let str3 of str2) {
                     // escape regex special chars
-                    str3 = str3.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, '\\$&').replace(/&/g, '&amp;')
-                        .replace(/</g, '&gt;').replace(/>/g, '&lt;')
+                    str3 = str3.replace(/[-[\]{}()*+?.,\\^$|#]/g, '\\$&').replace(/&/g, '&amp;')
+                        .replace(/</g, '&gt;').replace(/>/g, '&lt;').replace(/\s/g, '(.+?)')
                     let regex  = new RegExp((ww ? '\\b' : '') + str3 + (ww ? '\\b' : '')+ '(?!([^<]+)?>)',
                         'i' + (!options.onlyFirst ? 'g' : '')) // only outside tags
                     el.innerHTML = el.innerHTML.replace(regex, replaceValue)

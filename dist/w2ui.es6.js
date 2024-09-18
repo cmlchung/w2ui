@@ -1,4 +1,4 @@
-/* w2ui 2.0.x (nightly) (9/17/2024, 8:19:33 AM) (c) http://w2ui.com, vitmalina@gmail.com */
+/* w2ui 2.0.x (nightly) (9/18/2024, 12:12:42 AM) (c) http://w2ui.com, vitmalina@gmail.com */
 /**
  * Part of w2ui 2.0 library
  *  - Dependencies: w2utils
@@ -2449,8 +2449,8 @@ class Utils {
 		const str2 = this.splitSpacesExcludeQuotes(str);
 		for (let str3 of str2) {
                     // escape regex special chars
-                    str3 = str3.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, '\\$&').replace(/&/g, '&amp;')
-                        .replace(/</g, '&gt;').replace(/>/g, '&lt;')
+                    str3 = str3.replace(/[-[\]{}()*+?.,\\^$|#]/g, '\\$&').replace(/&/g, '&amp;')
+                        .replace(/</g, '&gt;').replace(/>/g, '&lt;').replace(/\s/g, '(.+?)')
                     let regex  = new RegExp((ww ? '\\b' : '') + str3 + (ww ? '\\b' : '')+ '(?!([^<]+)?>)',
                         'i' + (!options.onlyFirst ? 'g' : '')) // only outside tags
                     el.innerHTML = el.innerHTML.replace(regex, replaceValue)
