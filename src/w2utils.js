@@ -1539,9 +1539,9 @@ class Utils {
 		for (let str3 of str2) {
                     // escape regex special chars
                     str3 = str3.replace(/[-[\]{}()*+?.,\\^$|#]/g, '\\$&').replace(/&/g, '&amp;')
-                        .replace(/</g, '&gt;').replace(/>/g, '&lt;').replace(/\s/g, '(.+?)')
+                        .replace(/</g, '&gt;').replace(/>/g, '&lt;').replace(/\s/g, '(\\s+|(\\s*<.+?>\\s*)?)')
                     let regex  = new RegExp((ww ? '\\b' : '') + str3 + (ww ? '\\b' : '')+ '(?!([^<]+)?>)',
-                        'i' + (!options.onlyFirst ? 'g' : '')) // only outside tags
+                        'mi' + (!options.onlyFirst ? 'g' : '')) // only outside tags
                     el.innerHTML = el.innerHTML.replace(regex, replaceValue)
 		}
             })
